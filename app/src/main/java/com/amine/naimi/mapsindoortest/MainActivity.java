@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity  {
 
             @Override
             public void onPermissionDenied( PermissionDeniedResponse permissionDeniedResponse ) {
-                Toast.makeText(gpsProvider, "GPS permission denied", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "GPS permission denied", Toast.LENGTH_SHORT).show();
                 Log.d( TAG, "Dexter.onPermissionDenied: User has denied permissions and selected 'Never ask again'" );
 
 
