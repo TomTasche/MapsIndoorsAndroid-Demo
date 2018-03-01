@@ -25,16 +25,12 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import com.mapspeople.debug.dbglog;
 import com.mapspeople.mapcontrol.MapControl;
 import com.mapspeople.models.AppConfig;
-import com.mapspeople.models.CategoryCollection;
-import com.mapspeople.models.LocationDisplayRule;
+
 import com.mapspeople.models.LocationDisplayRules;
-import com.mapspeople.models.POIType;
 import com.mapspeople.models.Point;
-import com.mapspeople.models.PushMessageCollection;
 import com.mapspeople.models.Solution;
 import com.mapspeople.models.VenueCollection;
-import com.mapspeople.routing.MPDirectionsRenderer;
-import com.mapspeople.routing.interfaces.OnLegSelectedListener;
+
 
 
 import java.io.InputStream;
