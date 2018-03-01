@@ -5,7 +5,7 @@ android {
     buildToolsVersion '27.0.0'
 
     defaultConfig {
-        applicationId "com.amine.naimi.mapsindoortest"
+        applicationId "com.amine.naimi.mapsindoort"
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
@@ -32,7 +32,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.mapspeople.mapsindoors:mapsindoorssdk:2.0.0-alpha8@aar'
     compile 'com.karumi:dexter:4.2.0'
-    implementation "net.sourceforge.streamsupport:streamsupport:1.5.6"
     implementation "org.apache.commons:commons-math3:3.6.1"
 
 
