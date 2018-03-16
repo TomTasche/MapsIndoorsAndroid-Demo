@@ -17,6 +17,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
 }
 
 dependencies {
@@ -30,7 +36,9 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:11.8.0'
     compile 'com.google.android.gms:play-services-location:11.8.0'
     compile 'com.google.code.gson:gson:2.8.2'
-    compile 'com.mapspeople.mapsindoors:mapsindoorssdk:2.0.0-alpha8@aar'
+    compile 'com.mapspeople.mapsindoors:mapsindoorssdk:2.0.0-alpha9@aar'
+
+    implementation "net.sourceforge.streamsupport:streamsupport:1.6.0"
     compile 'com.karumi:dexter:4.2.0'
     implementation "org.apache.commons:commons-math3:3.6.1"
 

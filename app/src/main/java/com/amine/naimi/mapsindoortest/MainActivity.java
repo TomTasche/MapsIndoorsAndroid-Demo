@@ -3,6 +3,8 @@ package com.amine.naimi.mapsindoortest;
 import android.Manifest;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Camera;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -10,10 +12,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.DexterError;
@@ -22,10 +28,13 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.mapspeople.data.listeners.OnLoadingDataReadyListener;
 import com.mapspeople.debug.dbglog;
+import com.mapspeople.info.MPErrorCodes;
 import com.mapspeople.mapcontrol.MapControl;
 import com.mapspeople.models.AppConfig;
 
+import com.mapspeople.models.LocationDisplayRule;
 import com.mapspeople.models.LocationDisplayRules;
 import com.mapspeople.models.Point;
 import com.mapspeople.models.Solution;
@@ -39,31 +48,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity  {
-    private VenueCollection venues;
-    private Solution solution;
-
-    private boolean solutionReady = false;
-    private boolean venueReady = false;
-    private boolean settingsReady = false;
-    private boolean dataReady = false;
-    private AppConfig settings;
-    private Point START_POSITION = new Point();
-
-    String TAG = "DEXTER LOG";
-
-    private static Map<String, Object> locationTypeImages = new HashMap<>();
-
+public class MainActivity extends AppCompatActivity {
 
     MapControl myMapControl;
     private GoogleMap mMap;
-    LocationDisplayRules displayRules;
     SupportMapFragment mapFragment;
-    GPSPositionProvider gpsProvider;
 
-    PermissionListener mLocationPermissionListener;
-    PermissionRequestErrorListener mLocationPermissionRequestErrorListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,163 +65,54 @@ public class MainActivity extends AppCompatActivity  {
         dbglog.useDebug(true);
 
 
-        createPermissionListeners();
+        mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment));
 
-        Dexter.withActivity(this)
-                .withPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-                .withListener(mLocationPermissionListener)
-                .withErrorListener(mLocationPermissionRequestErrorListener)
-                .check();
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                mMap = googleMap;
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(50.8591041, 4.4508542), 19.5f));
+                setupMapIfNeeded();
+            }
+        });
     }
-
 
 
     void setupMapIfNeeded() {
-        MapControl.setSolutionId("550c26a864617400a40f0000");
+        MapControl.setSolutionId("36f22726b8bf4fa78eb4c5e6");
 
-        // init a mapControl
+// init a mapControl
         myMapControl = new MapControl(this, mapFragment, mMap);
 
-        //add a display rule
-        displayRules = new LocationDisplayRules();
-        // displayRules.add(new LocationDisplayRule("parking", R.drawable.elevator, 17f, false));
-//        myMapControl.addDisplayRules(displayRules);
+        //adding display rule here will make the SDK crash
+        LocationDisplayRules displayRules = new LocationDisplayRules();
 
-        // setting the current user position(blue dot)
-        double latitude = 57.08585;
-        double longitude = 9.95751;
-        myMapControl.setCurrentPosition(new Point(latitude,longitude ), 0);
+        final LocationDisplayRule ruleA = new LocationDisplayRule.Builder("Office").setBitmapIcon(R.drawable.misdk_dot_black).setShowLabel(false).setZOn(17).build();
 
-        //Add a position provider in able to track the user's position.
-        gpsProvider = new GPSPositionProvider(this.getApplicationContext());
-        //Telling map control about our provider
-        myMapControl.setPositionProvider(gpsProvider);
-        myMapControl.startPositioning();
-        myMapControl.showUserPosition(true);
-        //  myMapControl.setOnDataReadyListener(this);
+        displayRules.add(ruleA);
 
-     /*   MPDirectionsRenderer drRenderer = new MPDirectionsRenderer(this, new OnLegSelectedListener() {
+        myMapControl.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
-            public void onLegSelected(int i) {
-
+            public boolean onMarkerClick(Marker marker) {
+                return true;
             }
         });
 
-        drRenderer.setMap(mMap);*/
 
-    }
+        myMapControl.addDisplayRules(displayRules);
 
-
-/*
-
-    @Override
-    public void onVenueDataReady(final VenueCollection venueCollection)
-    {
-        venues = venueCollection;
-        venueReady = true;
-        new Handler(getMainLooper()).post(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                START_POSITION = venues.getDefaultVenue().getPosition();
-                myMapControl.selectFloor(venues.getDefaultVenue().getDefaultFloor());
-                myMapControl.setMapPosition(START_POSITION, 17, false);
-            }
-        });
-        onDataReady();
-    }
-
-    @Override
-    public void onSolutionDataReady(final Solution solution)
-    {
-        // when the solution data finish loading we can load the icons and store them locally
-        this.solution = solution;
-        List<POIType> types = solution.getTypes();
-        for (POIType t : types)
-        {
-            loadIcon(t.name, t.icon);
-        }
-        solutionReady = true;
-        onDataReady();
-    }
-
-
-    private void onDataReady()
-    {
-        if (solutionReady && venueReady && settingsReady && !dataReady)
-        {
-            dataReady = true;
-
-        }
-    }
-
-*/
-
-
-    //Loads an image from a URL and adds them to the locationTypeImages dictionary (if found)
-    public static void loadIcon(final String typeName, final String iconURL)
-    {
-        new Thread()
-        {
-            @Override
-            public void run()
-            {
-                try
-                {
-                    Bitmap bitmap = BitmapFactory.decodeStream((InputStream)new URL(iconURL).getContent());
-                    if (bitmap != null)
-                    {
-                        locationTypeImages.put(typeName, bitmap);
-                    }
-                } catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
-    }
-
-
-    private void createPermissionListeners()
-    {
-        mLocationPermissionListener = new PermissionListener() {
-            @Override
-            public void onPermissionGranted( PermissionGrantedResponse permissionGrantedResponse ) {
-
-                mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment));
-
-                mapFragment.getMapAsync(new OnMapReadyCallback() {
+        myMapControl.init(errorCode -> {
+            if (errorCode == MPErrorCodes.NO_ERROR) {
+                runOnUiThread(new Runnable() {
                     @Override
-                    public void onMapReady(GoogleMap googleMap) {
-                        mMap = googleMap;
-                        setupMapIfNeeded();
+                    public void run() {
+
                     }
                 });
             }
-
-            @Override
-            public void onPermissionDenied( PermissionDeniedResponse permissionDeniedResponse ) {
-                Toast.makeText(getApplicationContext(), "GPS permission denied", Toast.LENGTH_SHORT).show();
-                Log.d( TAG, "Dexter.onPermissionDenied: User has denied permissions and selected 'Never ask again'" );
+        });
 
 
-            }
-
-            @Override
-            public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken ) {
-                permissionToken.continuePermissionRequest();
-                Log.d( TAG, "Should be shown again" );
-
-            }
-        };
-
-        mLocationPermissionRequestErrorListener = new PermissionRequestErrorListener() {
-            @Override
-            public void onError( DexterError dexterError ) {
-                Log.d( TAG, String.format( Locale.US, "Dexter.onError: %s", dexterError ) );
-            }
-        };
     }
 
 }

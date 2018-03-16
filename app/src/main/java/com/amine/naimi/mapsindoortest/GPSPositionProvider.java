@@ -16,6 +16,8 @@ import com.google.android.gms.maps.LocationSource;
 import com.mapspeople.models.Point;
 import com.mapspeople.position.MPPositionResult;
 import com.mapspeople.position.interfaces.OnPositionUpdateListener;
+import com.mapspeople.position.interfaces.OnStateChangedListener;
+import com.mapspeople.position.interfaces.PermissionsAndPSListener;
 import com.mapspeople.position.interfaces.PositionProvider;
 import com.mapspeople.position.interfaces.PositionResult;
 
@@ -56,16 +58,21 @@ public class GPSPositionProvider extends Activity implements PositionProvider, L
         return new String[0];
     }
 
-    @Override
+	@Override
+	public boolean isPSEnabled() {
+		return false;
+	}
+
+	@Override
     public void startPositioning(String arg) {
         if (!isRunning) {
             isRunning = true;
 
             if (ActivityCompat.checkSelfPermission(this.context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 7, this);
+                //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 7, this);
                 return;
             }
-            onLocationChanged( locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) );
+            //onLocationChanged( locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) );
             if (listeners != null) {
 				for (OnPositionUpdateListener listener : listeners) {
 					listener.onPositioningStarted(this);
@@ -79,7 +86,7 @@ public class GPSPositionProvider extends Activity implements PositionProvider, L
 	public void stopPositioning(String arg) {
 		if (isRunning) {
 			isRunning = false;
-			locationManager.removeUpdates(this);
+			//locationManager.removeUpdates(this);
 		}
 	}
 
@@ -99,6 +106,21 @@ public class GPSPositionProvider extends Activity implements PositionProvider, L
     @Override
 	public void setProviderId(String id) {
 		providerId = id;
+	}
+
+	@Override
+	public void addOnstateChangedListener(OnStateChangedListener onStateChangedListener) {
+
+	}
+
+	@Override
+	public void removeOnstateChangedListener(OnStateChangedListener onStateChangedListener) {
+
+	}
+
+	@Override
+	public void checkPermissionsAndPSEnabled(PermissionsAndPSListener permissionsAndPSListener) {
+
 	}
 
 	@Override
@@ -156,6 +178,11 @@ public class GPSPositionProvider extends Activity implements PositionProvider, L
 				startPositioning(arg);
 			}
 		}, millis);
+	}
+
+	@Override
+	public void terminate() {
+
 	}
 
 	@Override
