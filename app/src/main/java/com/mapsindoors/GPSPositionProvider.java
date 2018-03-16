@@ -1,4 +1,4 @@
-package com.amine.naimi.mapsindoortest;
+package com.mapsindoors;
 
 import android.Manifest;
 import android.app.Activity;
@@ -13,13 +13,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 
 import com.google.android.gms.maps.LocationSource;
+import com.mapspeople.MPPositionResult;
+import com.mapspeople.OnPositionUpdateListener;
+import com.mapspeople.OnStateChangedListener;
+import com.mapspeople.PermissionsAndPSListener;
+import com.mapspeople.PositionProvider;
+import com.mapspeople.PositionResult;
 import com.mapspeople.models.Point;
-import com.mapspeople.position.MPPositionResult;
-import com.mapspeople.position.interfaces.OnPositionUpdateListener;
-import com.mapspeople.position.interfaces.OnStateChangedListener;
-import com.mapspeople.position.interfaces.PermissionsAndPSListener;
-import com.mapspeople.position.interfaces.PositionProvider;
-import com.mapspeople.position.interfaces.PositionResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,13 +28,13 @@ import java.util.TimerTask;
 
 public class GPSPositionProvider extends Activity implements PositionProvider, LocationListener, LocationSource {
 
-    private LocationManager locationManager;
-    private List<OnPositionUpdateListener> listeners;
-    private String providerId;
-    private PositionResult latestPosition;
-    private boolean isRunning;
-    private Context context;
-    private OnLocationChangedListener googleListener;
+    private LocationManager                 locationManager;
+    private List<OnPositionUpdateListener > listeners;
+    private String                          providerId;
+    private PositionResult                  latestPosition;
+    private boolean                         isRunning;
+    private Context                         context;
+    private OnLocationChangedListener       googleListener;
 
     public GPSPositionProvider(Context context) {
         super();

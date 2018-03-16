@@ -1,4 +1,4 @@
-package com.amine.naimi.mapsindoortest;
+package com.mapsindoors;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
 
     tools:context="com.amine.naimi.mapsindoortest.MainActivity">
+
     <fragment
         android:id="@+id/map_fragment"
         android:layout_width="match_parent"
