@@ -8,23 +8,19 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.mapspeople.Location;
-import com.mapspeople.LocationDisplayRule;
 import com.mapspeople.MapControl;
 import com.mapspeople.MapsIndoors;
 import com.mapspeople.dbglog;
 import com.mapspeople.errors.MIError;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public class MainActivity extends AppCompatActivity
 {
     public static final String TAG = MainActivity.class.getSimpleName();
 
-    MapControl myMapControl;
-    private GoogleMap mMap;
     SupportMapFragment mapFragment;
+    GoogleMap          mGoogleMap;
+    MapControl         myMapControl;
 
 
     @Override
@@ -34,13 +30,13 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         // MapsIndoors SDK debug setup
-//        {
-//            // Enable/disable internal debug messages / assertions
-//            dbglog.useDebug( BuildConfig.DEBUG );
-//
-//            // Add a log tag prefix to the MI SDK logs
-//            dbglog.setCustomTagPrefix( BuildConfig.FLAVOR + "_" );
-//        }
+        {
+            // Enable/disable internal debug messages / assertions
+            dbglog.useDebug( BuildConfig.DEBUG );
+
+            // Add a log tag prefix to the MI SDK logs
+            dbglog.setCustomTagPrefix( BuildConfig.FLAVOR + "_" );
+        }
 
         // Initialize MapsIndoors Here
         MapsIndoors.initialize(
@@ -53,7 +49,14 @@ public class MainActivity extends AppCompatActivity
 	    MapsIndoors.synchronizeContent( errorCode -> {
 		    if(dbglog.isDebugMode())
 		    {
-			    dbglog.LogI( TAG, "MapsIndoors.synchronizeContent -> errorCode: " + errorCode );
+                if( errorCode != MIError.NO_ERROR )
+                {
+                    dbglog.LogI( TAG, "MapsIndoors.synchronizeContent: done -> errorCode: " + errorCode );
+                }
+                else
+                {
+                    dbglog.LogI( TAG, "MapsIndoors.synchronizeContent ERROR -> " + MIError.getDataLoadersErrorCode( errorCode ) );
+                }
 		    }
 	    });
 
@@ -63,10 +66,10 @@ public class MainActivity extends AppCompatActivity
         //
         mapFragment.getMapAsync( googleMap -> {
 
-            mMap = googleMap;
+            mGoogleMap = googleMap;
 
             //
-            mMap.moveCamera( CameraUpdateFactory.newLatLngZoom( new LatLng( 57.05813067, 9.95058065 ), 13.0f ) );
+            mGoogleMap.moveCamera( CameraUpdateFactory.newLatLngZoom( new LatLng( 57.05813067, 9.95058065 ), 13.0f ) );
 
             setupMapsIndoors();
         } );
@@ -74,7 +77,7 @@ public class MainActivity extends AppCompatActivity
 
     void setupMapsIndoors() {
 
-        myMapControl = new MapControl(this, mapFragment, mMap);
+        myMapControl = new MapControl(this, mapFragment, mGoogleMap );
 
         //
 //        {
@@ -118,7 +121,7 @@ public class MainActivity extends AppCompatActivity
                     myMapControl.selectFloor( 1 );
 
                     //
-                    mMap.animateCamera( CameraUpdateFactory.newLatLngZoom( new LatLng( 57.05813067, 9.95058065 ), 19f ) );
+                    mGoogleMap.animateCamera( CameraUpdateFactory.newLatLngZoom( new LatLng( 57.05813067, 9.95058065 ), 19f ) );
                 });
             }
         });
