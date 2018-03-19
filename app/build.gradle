@@ -40,7 +40,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:11.8.0'
     implementation 'com.google.code.gson:gson:2.8.2'
 
-    implementation 'com.mapspeople.mapsindoors:mapsindoorssdk:2.0.0-alpha11@aar'
+    implementation 'com.mapspeople.mapsindoors:mapsindoorssdk:2.0.0-alpha12@aar'
     //implementation( ":mapsindoorssdk:2.0.0-alpha11@aar" )
     //implementation project(':MapsIndoorsSDK')
 

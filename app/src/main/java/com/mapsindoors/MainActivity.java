@@ -126,13 +126,4 @@ public class MainActivity extends AppCompatActivity
             }
         });
     }
-
-    @Override
-    protected void onDestroy()
-    {
-        // For now, terminate the SDK when the activity is destroyed
-        MapsIndoors.onApplicationTerminate();
-
-        super.onDestroy();
-    }
 }
