@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.mapspeople.Location;
 import com.mapspeople.MapControl;
@@ -30,13 +31,13 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         // MapsIndoors SDK debug setup
-        {
-            // Enable/disable internal debug messages / assertions
-            dbglog.useDebug( BuildConfig.DEBUG );
-
-            // Add a log tag prefix to the MI SDK logs
-            dbglog.setCustomTagPrefix( BuildConfig.FLAVOR + "_" );
-        }
+//        {
+//            // Enable/disable internal debug messages / assertions
+//            dbglog.useDebug( BuildConfig.DEBUG );
+//
+//            // Add a log tag prefix to the MI SDK logs
+//            dbglog.setCustomTagPrefix( BuildConfig.FLAVOR + "_" );
+//        }
 
         // Initialize MapsIndoors Here
         MapsIndoors.initialize(
@@ -46,16 +47,16 @@ public class MainActivity extends AppCompatActivity
         );
 
         //
-	    MapsIndoors.synchronizeContent( errorCode -> {
+	    MapsIndoors.synchronizeContent( error -> {
 		    if(dbglog.isDebugMode())
 		    {
-                if( errorCode != MIError.NO_ERROR )
+                if( error == null )
                 {
-                    dbglog.LogI( TAG, "MapsIndoors.synchronizeContent: done -> errorCode: " + errorCode );
+                    dbglog.LogI( TAG, "MapsIndoors.synchronizeContent: DONE" );
                 }
                 else
                 {
-                    dbglog.LogI( TAG, "MapsIndoors.synchronizeContent ERROR -> " + MIError.getDataLoadersErrorCode( errorCode ) );
+                    dbglog.LogI( TAG, "MapsIndoors.synchronizeContent ERROR -> " + error.message );
                 }
 		    }
 	    });
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity
         } );
 
         myMapControl.init( errorCode -> {
-            if( errorCode == MIError.NO_ERROR )
+            if( errorCode == null )
             {
                 runOnUiThread( () -> {
 
