@@ -77,88 +77,42 @@ public class MainActivity extends AppCompatActivity
             //
             mGoogleMap.moveCamera( CameraUpdateFactory.newLatLngZoom( new LatLng( 57.05813067, 9.95058065 ), 13.0f ) );
 
+            //
             setupMapsIndoors();
         } );
     }
 
-    void setupMapsIndoors() {
+	void setupMapsIndoors()
+	{
+		//
+		myMapControl = new MapControl( this, mapFragment, mGoogleMap );
 
-        myMapControl = new MapControl(this, mapFragment, mGoogleMap );
+		//
+		myMapControl.setOnMarkerClickListener( marker -> {
 
-        //
-        {
-            LocationDisplayRules drs = myMapControl.getDisplayRules();
+			final Location loc = myMapControl.getLocation( marker );
+			if( loc != null )
+			{
+				String locationName = loc.getName();
+			}
 
-            LocationDisplayRules displayRules = new LocationDisplayRules();
-            final LocationDisplayRule ruleA = new LocationDisplayRule.Builder("<Office>").
-                    setBitmapIcon( R.drawable.misdk_dot_black ).
-                    setShowLabel( false ).
-                    setZOn( 16 ).
-                    build();
+			return true;
+		});
 
-            displayRules.add( ruleA );
-            myMapControl.addDisplayRules( displayRules );
-        }
-        {
-            LocationDisplayRules drs = myMapControl.getDisplayRules();
+		//
+		myMapControl.init( errorCode -> {
+			if( errorCode == null )
+			{
+				//
+				runOnUiThread( () -> {
 
-            final LocationDisplayRule ruleA = new LocationDisplayRule.Builder( "<Office2>" ).
+					//
+					myMapControl.selectFloor( 1 );
 
-                    //setBitmapIcon( R.drawable.misdk_dot_black ).
-                    //setBitmapIcon( R.drawable.misdk_circle_shape ).
-                    setBitmapIcon( R.drawable.ic_flight_takeoff_black_24dp ).
-                    setPOISize( 40 ).
-                    //setShowLabel( true ).
-                    setZOn( 16 ).
-                    build();
-
-            myMapControl.getDisplayRules().add( ruleA );
-        }
-
-        myMapControl.setOnMarkerClickListener( marker -> {
-
-            Location aLocation = myMapControl.getLocation( marker );
-            if( aLocation != null )
-            {
-                LocationDisplayRules lds = myMapControl.getDisplayRules();
-
-                String locationName = aLocation.getName();
-                LocationDisplayRule locationDR = aLocation.getDisplayRule();
-
-//                Marker m = aLocation.getMarker();
-//                if( m != null )
-//                {
-//                    aLocation.setMarker( null );
-//                    m.remove();
-//                }
-
-                aLocation.setMarkerAsSetup( false );
-                aLocation.setDisplayRule( lds.getRule( "<Office2>" ) );
-                aLocation.setVisible( false );
-                aLocation.updateView( mGoogleMap );
-
-                LocationDisplayRule locationDRN = aLocation.getDisplayRule();
-
-                if(BuildConfig.DEBUG){}
-            }
-
-            return true;
-        } );
-
-        myMapControl.init( errorCode -> {
-            if( errorCode == null )
-            {
-                runOnUiThread( () -> {
-
-                    //
-                    myMapControl.selectFloor( 1 );
-
-	                LocationDisplayRules drs = myMapControl.getDisplayRules();
-
-                    //
-                    mGoogleMap.animateCamera( CameraUpdateFactory.newLatLngZoom( new LatLng( 57.05813067, 9.95058065 ), 19f ) );
-                });
-            }
-        });
+					//
+					mGoogleMap.animateCamera( CameraUpdateFactory.newLatLngZoom( new LatLng( 57.05813067, 9.95058065 ), 19f ) );
+				} );
+			}
+		} );
     }
 }
