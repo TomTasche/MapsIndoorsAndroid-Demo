@@ -10,7 +10,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.mapspeople.Location;
 import com.mapspeople.MapControl;
 import com.mapspeople.MapsIndoors;
-import com.mapspeople.dbglog;
 
 
 public class MainActivity extends AppCompatActivity
@@ -21,66 +20,48 @@ public class MainActivity extends AppCompatActivity
     GoogleMap          mGoogleMap;
     MapControl         myMapControl;
 
+    final LatLng mapsPeopleCorporateHQLocation = new LatLng( 57.05813067, 9.95058065 );
 
-    @Override
+
+
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
 
-        // MapsIndoors SDK debug setup
-        {
-            // Enable/disable internal debug messages / assertions
-            dbglog.useDebug( BuildConfig.DEBUG );
-
-            // Add a log tag prefix to the MI SDK logs
-            dbglog.setCustomTagPrefix( BuildConfig.FLAVOR + "_" );
-        }
-
-        // Initialize MapsIndoors Here
+        // Initialize the MapsIndoors SDK here by providing:
+	    // - The application context
+	    // - The MapsIndoors API key
+	    // - Your Google Maps API key
         MapsIndoors.initialize(
                 getApplicationContext(),
                 getString(R.string.mapsindoors_api_key),
                 getString( R.string.google_maps_key )
         );
 
-        //
-	    MapsIndoors.synchronizeContent( error -> {
-		    if(dbglog.isDebugMode())
-		    {
-                if( error == null )
-                {
-                    dbglog.LogI( TAG, "MapsIndoors.synchronizeContent: DONE" );
-                }
-                else
-                {
-                    dbglog.LogI( TAG, "MapsIndoors.synchronizeContent ERROR -> " + error.message );
-                }
-		    }
-	    });
-
-        //
+	    // Get a reference to Google Map's fragment
         mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById( R.id.map_fragment ));
 
-        //
+        // Get the Google Map object
         mapFragment.getMapAsync( googleMap -> {
 
             mGoogleMap = googleMap;
 
-            //
-            mGoogleMap.moveCamera( CameraUpdateFactory.newLatLngZoom( new LatLng( 57.05813067, 9.95058065 ), 13.0f ) );
+            // Set the camera to a known location (in our case, our Corporate headquarters)
+            mGoogleMap.moveCamera( CameraUpdateFactory.newLatLngZoom( mapsPeopleCorporateHQLocation, 13.0f ) );
 
-            //
+            // Setup MapsIndoors's MapControl
             setupMapsIndoors();
         } );
     }
 
 	void setupMapsIndoors()
 	{
-		//
+		// Create a new MapControl instance
 		myMapControl = new MapControl( this, mapFragment, mGoogleMap );
 
-		//
+		// Add a marker click listener. We'll just show an info window with the POI's name
 		myMapControl.setOnMarkerClickListener( marker -> {
 
 			final Location loc = myMapControl.getLocation( marker );
@@ -92,18 +73,17 @@ public class MainActivity extends AppCompatActivity
 			return true;
 		});
 
-		//
+		// Initialize MapControl to get the locations on the map, etc.
 		myMapControl.init( errorCode -> {
 			if( errorCode == null )
 			{
-				//
 				runOnUiThread( () -> {
 
-					//
+					// Once MapControl has been initialized, set a floor
 					myMapControl.selectFloor( 1 );
 
-					//
-					mGoogleMap.animateCamera( CameraUpdateFactory.newLatLngZoom( new LatLng( 57.05813067, 9.95058065 ), 19f ) );
+					// Animate the camera closer
+					mGoogleMap.animateCamera( CameraUpdateFactory.newLatLngZoom( mapsPeopleCorporateHQLocation, 19f ) );
 				} );
 			}
 		} );
