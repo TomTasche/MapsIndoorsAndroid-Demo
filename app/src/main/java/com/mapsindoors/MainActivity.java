@@ -1,23 +1,16 @@
 package com.mapsindoors;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.mapspeople.Location;
-import com.mapspeople.LocationDisplayRule;
-import com.mapspeople.LocationDisplayRules;
 import com.mapspeople.MapControl;
 import com.mapspeople.MapsIndoors;
 import com.mapspeople.dbglog;
-import com.mapspeople.errors.MIError;
 
 
 public class MainActivity extends AppCompatActivity
