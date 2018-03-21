@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity
 			final Location loc = myMapControl.getLocation( marker );
 			if( loc != null )
 			{
-				String locationName = loc.getName();
+				marker.showInfoWindow();
 			}
 
 			return true;
