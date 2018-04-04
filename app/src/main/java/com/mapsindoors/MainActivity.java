@@ -7,9 +7,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.mapspeople.Location;
-import com.mapspeople.MapControl;
-import com.mapspeople.MapsIndoors;
+import com.mapsindoors.mapssdk.Location;
+import com.mapsindoors.mapssdk.MapControl;
+import com.mapsindoors.mapssdk.MapsIndoors;
 
 
 public class MainActivity extends AppCompatActivity
@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity
 
     SupportMapFragment mapFragment;
     GoogleMap          mGoogleMap;
-    MapControl         myMapControl;
+    MapControl myMapControl;
 
     final LatLng mapsPeopleCorporateHQLocation = new LatLng( 57.05813067, 9.95058065 );
 

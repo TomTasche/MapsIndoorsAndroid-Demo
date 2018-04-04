@@ -9,7 +9,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
     }
 
     buildTypes {
@@ -33,7 +33,7 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.0-beta6'
     implementation 'com.google.android.gms:play-services-maps:12.0.1'
 
-    implementation 'com.mapspeople.mapsindoors:mapsindoorssdk:2.0.0-beta05@aar'
+    implementation 'com.mapspeople.mapsindoors:mapsindoorssdk:2.0.0-beta06@aar'
     implementation 'com.google.code.gson:gson:2.8.2'
 }
 
