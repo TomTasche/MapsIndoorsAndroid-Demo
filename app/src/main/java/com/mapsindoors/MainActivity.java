@@ -33,12 +33,13 @@ public class MainActivity extends AppCompatActivity
         // Initialize the MapsIndoors SDK here by providing:
 	    // - The application context
 	    // - The MapsIndoors API key
-	    // - Your Google Maps API key
         MapsIndoors.initialize(
                 getApplicationContext(),
-                getString(R.string.mapsindoors_api_key),
-                getString( R.string.google_maps_key )
+                getString(R.string.mapsindoors_api_key)
         );
+
+		// Your Google Maps API key
+		MapsIndoors.setGoogleAPIKey( getString( R.string.google_maps_key ) );
 
 	    // Get a reference to Google Map's fragment
         mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById( R.id.map_fragment ));
