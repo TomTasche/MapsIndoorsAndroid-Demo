@@ -14,7 +14,6 @@ import com.mapsindoors.mapssdk.MapsIndoors;
 
 public class MainActivity extends AppCompatActivity
 {
-    public static final String TAG = MainActivity.class.getSimpleName();
 
     SupportMapFragment mapFragment;
     GoogleMap          mGoogleMap;
@@ -85,8 +84,8 @@ public class MainActivity extends AppCompatActivity
 
 					// Animate the camera closer
 					mGoogleMap.animateCamera( CameraUpdateFactory.newLatLngZoom( mapsPeopleCorporateHQLocation, 19f ) );
-				} );
+				});
 			}
-		} );
+		});
     }
 }
