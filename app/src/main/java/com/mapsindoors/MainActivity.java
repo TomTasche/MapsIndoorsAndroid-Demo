@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity
 
 		setContentView( R.layout.activity_main );
 
+		setTitle( R.string.app_long_name );
+
         // Initialize the MapsIndoors SDK here by providing:
 	    // - The application context
 	    // - The MapsIndoors API key
