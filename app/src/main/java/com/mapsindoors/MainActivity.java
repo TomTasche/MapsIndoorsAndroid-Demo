@@ -76,8 +76,8 @@ public class MainActivity extends AppCompatActivity
 		});
 
 		// Initialize MapControl to get the locations on the map, etc.
-		myMapControl.init( errorCode -> {
-			if( errorCode == null )
+		myMapControl.init( error -> {
+			if( error == null )
 			{
 				runOnUiThread( () -> {
 
