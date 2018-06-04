@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity
 
     SupportMapFragment mapFragment;
     GoogleMap          mGoogleMap;
-    MapControl myMapControl;
+    MapControl         myMapControl;
 
     final LatLng mapsPeopleCorporateHQLocation = new LatLng( 57.05813067, 9.95058065 );
 
