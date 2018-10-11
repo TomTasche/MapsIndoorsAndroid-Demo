@@ -3,8 +3,6 @@ package com.mapsindoors;
 import android.Manifest;
 import android.content.Context;
 import android.location.Location;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.customlbs.library.Indoors;
 import com.customlbs.library.IndoorsException;
@@ -17,13 +15,13 @@ import com.customlbs.library.model.Building;
 import com.customlbs.library.model.Zone;
 import com.customlbs.library.util.IndoorsCoordinateUtil;
 import com.customlbs.shared.Coordinate;
-import com.mapspeople.MPPositionResult;
-import com.mapspeople.OnPositionUpdateListener;
-import com.mapspeople.OnStateChangedListener;
-import com.mapspeople.PermissionsAndPSListener;
-import com.mapspeople.PositionProvider;
-import com.mapspeople.PositionResult;
-import com.mapspeople.models.Point;
+import com.mapsindoors.mapssdk.OnPositionUpdateListener;
+import com.mapsindoors.mapssdk.Point;
+import com.mapsindoors.mapssdk.PositionProvider;
+import com.mapsindoors.mapssdk.MPPositionResult;
+import com.mapsindoors.mapssdk.OnStateChangedListener;
+import com.mapsindoors.mapssdk.PermissionsAndPSListener;
+import com.mapsindoors.mapssdk.PositionResult;
 
 import java.util.List;
 
@@ -39,7 +37,6 @@ public class IndoorsPositionProvider implements PositionProvider, IndoorsLocatio
         this.context = context;
     }
 
-    @NonNull
     @Override
     public String[] getRequiredPermissions() {
         return new String[] {Manifest.permission.ACCESS_COARSE_LOCATION};
@@ -51,7 +48,7 @@ public class IndoorsPositionProvider implements PositionProvider, IndoorsLocatio
     }
 
     @Override
-    public void startPositioning(@Nullable String s) {
+    public void startPositioning(String s) {
         if (indoors == null) {
             IndoorsFactory.createInstance(context, "6926cf09-5351-4de6-8da1-4f9a80ee7db7", this);
         } else {
@@ -60,7 +57,7 @@ public class IndoorsPositionProvider implements PositionProvider, IndoorsLocatio
     }
 
     @Override
-    public void stopPositioning(@Nullable String s) {
+    public void stopPositioning(String s) {
         indoors.removeLocationListener(this);
     }
 
@@ -70,17 +67,17 @@ public class IndoorsPositionProvider implements PositionProvider, IndoorsLocatio
     }
 
     @Override
-    public void addOnPositionUpdateListener(@Nullable OnPositionUpdateListener onPositionUpdateListener) {
+    public void addOnPositionUpdateListener(OnPositionUpdateListener onPositionUpdateListener) {
         this.onPositionUpdateListener = onPositionUpdateListener;
     }
 
     @Override
-    public void removeOnPositionUpdateListener(@Nullable OnPositionUpdateListener onPositionUpdateListener) {
+    public void removeOnPositionUpdateListener(OnPositionUpdateListener onPositionUpdateListener) {
         this.onPositionUpdateListener = null;
     }
 
     @Override
-    public void setProviderId(@Nullable String s) {
+    public void setProviderId(String s) {
     }
 
     @Override
@@ -95,20 +92,18 @@ public class IndoorsPositionProvider implements PositionProvider, IndoorsLocatio
     public void checkPermissionsAndPSEnabled(PermissionsAndPSListener permissionsAndPSListener) {
     }
 
-    @Nullable
     @Override
     public String getProviderId() {
         return "indoo.rs";
     }
 
-    @Nullable
     @Override
     public PositionResult getLatestPosition() {
         return null;
     }
 
     @Override
-    public void startPositioningAfter(int i, @Nullable String s) {
+    public void startPositioningAfter(int i, String s) {
 
     }
 
@@ -120,6 +115,8 @@ public class IndoorsPositionProvider implements PositionProvider, IndoorsLocatio
     @Override
     public void connected() {
         indoors = IndoorsFactory.getInstance();
+
+        indoors.enableEvaluationMode();
 
         indoors.registerLocationListener(this);
 
@@ -151,6 +148,7 @@ public class IndoorsPositionProvider implements PositionProvider, IndoorsLocatio
                 accuracy,
                 lastOrientation
         );
+        position.setFloor(coordinate.z * 10);
 
         onPositionUpdateListener.onPositionUpdate(position);
     }
