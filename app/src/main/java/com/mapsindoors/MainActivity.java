@@ -1,8 +1,20 @@
 package com.mapsindoors;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import com.customlbs.library.Indoors;
+import com.customlbs.library.IndoorsException;
+import com.customlbs.library.IndoorsFactory;
+import com.customlbs.library.IndoorsLocationListener;
+import com.customlbs.library.LocalizationParameters;
+import com.customlbs.library.callbacks.IndoorsServiceCallback;
+import com.customlbs.library.callbacks.LoadingBuildingStatus;
+import com.customlbs.library.model.Building;
+import com.customlbs.library.model.Zone;
+import com.customlbs.shared.Coordinate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -10,6 +22,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.mapspeople.Location;
 import com.mapspeople.MapControl;
 import com.mapspeople.MapsIndoors;
+import com.mapspeople.OnPositionUpdateListener;
+import com.mapspeople.OnStateChangedListener;
+import com.mapspeople.PermissionsAndPSListener;
+import com.mapspeople.PositionProvider;
+import com.mapspeople.PositionResult;
+
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity
@@ -20,7 +39,7 @@ public class MainActivity extends AppCompatActivity
     GoogleMap          mGoogleMap;
     MapControl         myMapControl;
 
-    final LatLng mapsPeopleCorporateHQLocation = new LatLng( 57.05813067, 9.95058065 );
+    final LatLng mapsPeopleCorporateHQLocation = new LatLng( 48.2005373,16.3679884 );
 
 
 
@@ -36,7 +55,7 @@ public class MainActivity extends AppCompatActivity
 	    // - Your Google Maps API key
         MapsIndoors.initialize(
                 getApplicationContext(),
-                getString(R.string.mapsindoors_api_key),
+                "11152d72f2b74c9f89766c6f",
                 getString( R.string.google_maps_key )
         );
 
@@ -54,7 +73,7 @@ public class MainActivity extends AppCompatActivity
             // Setup MapsIndoors's MapControl
             setupMapsIndoors();
         } );
-    }
+	}
 
 	void setupMapsIndoors()
 	{
@@ -84,8 +103,13 @@ public class MainActivity extends AppCompatActivity
 
 					// Animate the camera closer
 					mGoogleMap.animateCamera( CameraUpdateFactory.newLatLngZoom( mapsPeopleCorporateHQLocation, 19f ) );
+
+					MapsIndoors.setPositionProvider(new IndoorsPositionProvider(this));
+					myMapControl.showUserPosition(true);
 				} );
 			}
 		} );
     }
+
+
 }

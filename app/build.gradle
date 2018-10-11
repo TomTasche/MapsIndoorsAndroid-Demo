@@ -35,5 +35,7 @@ dependencies {
 
     implementation 'com.mapspeople.mapsindoors:mapsindoorssdk:2.0.0-beta01@aar'
     implementation 'com.google.code.gson:gson:2.8.2'
+
+    implementation group: 'com.customlbs.android', name: 'indoors-library-surface', version: '4.14.1', ext: 'aar', classifier: 'release'
 }
 
