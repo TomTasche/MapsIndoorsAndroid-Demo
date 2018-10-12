@@ -148,7 +148,9 @@ public class IndoorsPositionProvider implements PositionProvider, IndoorsLocatio
                 accuracy,
                 lastOrientation
         );
-        position.setFloor(coordinate.z * 10);
+
+        int floorLevel = coordinate.z * 10;
+        position.setFloor(floorLevel);
 
         onPositionUpdateListener.onPositionUpdate(position);
     }
