@@ -39,7 +39,7 @@ public class IndoorsPositionProvider implements PositionProvider, IndoorsLocatio
 
     @Override
     public String[] getRequiredPermissions() {
-        return new String[] {Manifest.permission.ACCESS_COARSE_LOCATION};
+        return new String[] {Manifest.permission.ACCESS_FINE_LOCATION};
     }
 
     @Override
@@ -81,11 +81,11 @@ public class IndoorsPositionProvider implements PositionProvider, IndoorsLocatio
     }
 
     @Override
-    public void addOnstateChangedListener(OnStateChangedListener onStateChangedListener) {
+    public void addOnStateChangedListener(OnStateChangedListener onStateChangedListener) {
     }
 
     @Override
-    public void removeOnstateChangedListener(OnStateChangedListener onStateChangedListener) {
+    public void removeOnStateChangedListener(OnStateChangedListener onStateChangedListener) {
     }
 
     @Override

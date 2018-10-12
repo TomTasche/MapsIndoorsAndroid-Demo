@@ -55,6 +55,15 @@ public class MainActivity extends AppCompatActivity
 		requestPermissionsFromUser();
 	}
 
+	@Override
+	protected void onStart() {
+		super.onStart();
+
+		if (indoorsPositionProvider != null) {
+			indoorsPositionProvider.startPositioning(null);
+		}
+	}
+
 	private void requestPermissionsFromUser() {
 		/**
 		 * Since API level 23 we need to request permissions for so called dangerous permissions from the user.
@@ -68,7 +77,7 @@ public class MainActivity extends AppCompatActivity
 			if (permissionCheckForLocation != PackageManager.PERMISSION_GRANTED) {
 				requestPermissions(
 						new String[] {
-								Manifest.permission.ACCESS_COARSE_LOCATION
+								Manifest.permission.ACCESS_FINE_LOCATION
 						},
 						REQUEST_CODE_PERMISSIONS);
 			} else {
